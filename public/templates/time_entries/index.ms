@@ -4,20 +4,22 @@
   <thead>
     <tr>
       <th>Time</th>
-      <th>Description</th>
+      <th>Note</th>
       <th>Duration</th>
-      <th>Amount</th>
+      <th>Revenue</th>
       <th>User</th>
+      <th>Service</th>
     </tr>
   </thead>
   <tbody>
   {{#time_entries}}
     <tr>
-      <td>{{time}}</td>
-      <td>{{description}}</td>
+      <td>{{date_at}}</td>
+      <td>{{note}}</td>
       <td>{{duration}}</td>
-      <td>{{amount}}</td>
-      <td>{{user}}</td>
+      <td>{{revenue}}</td>
+      <td>{{user_name}}</td>
+      <td>{{service_name}}</td>
     </tr>
   {{/time_entries}}
   </tbody>

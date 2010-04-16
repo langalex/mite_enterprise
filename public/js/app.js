@@ -1,6 +1,7 @@
 var app = $.sammy('#app', function() {
   this.use(Sammy.Mustache, 'ms');
   this.use(Sammy.NestedParams);
+  this.helpers(exports.MiteHelpers);
   
   this.get('#/', function() {
     this.partial('templates/projects/new.ms')
@@ -20,15 +21,19 @@ var app = $.sammy('#app', function() {
   });
   
   this.get('#/time_entries', function(context) {
-    $.get('/time_entries', {projects: context.params['projects'], api_key: context.params['api_key'],
-      subdmain: context.params['api_key']}, function(time_entries) {
-        context.time_entries = time_entries;
+    var that = this;
+    $.get('/time_entries', {api_key: context.params['api_key'],
+      subdomain: context.params['subdomain'], project_id: context.params['project_id'],
+        from: context.params['from'], to: context.params['to']}, function(time_entries) {
+        context.time_entries = that.time_entries_view(time_entries);
         context.partial('templates/time_entries/index.ms', function(html) {
           $('#time_entries').html(html);
         });
       }
     );
   });
+  
+  
 });
 
 $(function() {
