@@ -23,7 +23,7 @@ var app = $.sammy('#app', function() {
   this.get('#/time_entries', function(context) {
     var that = this;
     $.get('/time_entries', {api_key: context.params['api_key'],
-      subdomain: context.params['subdomain'], project_id: context.params['project_id'],
+      subdomain: context.params['subdomain'], project_ids: context.params['project_ids'],
         from: context.params['from'], to: context.params['to']}, function(time_entries) {
         context.time_entries = that.time_entries_view(time_entries);
         context.partial('templates/time_entries/index.ms', function(html) {

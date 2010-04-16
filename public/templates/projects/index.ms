@@ -7,7 +7,7 @@
   <ul>
     {{#projects}}
       <li>
-        <input type="radio" name="project_id" value="{{id}}"/> {{name}}
+        <input type="checkbox" name="project_ids[]" value="{{id}}"/> {{name}}
       </li>
     {{/projects}}
   </ul>
