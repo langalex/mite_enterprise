@@ -9,7 +9,7 @@ var app = $.sammy('#app', function() {
   this.get('#/projects', function(context) {
     $.get('/projects', {api_key: context.params['api_key'], subdomain: context.params['subdomain']},
       function(projects) {
-        context.projects = projects;
+        context.projects = projects.map(function(item) {return(item['project'])});
         context.api_key = context.params['api_key'];
         context.subdomain = context.params['subdomain'];
         context.partial('templates/projects/index.ms', function(html) {
