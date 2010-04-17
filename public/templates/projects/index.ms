@@ -19,9 +19,9 @@
 
     <p>
       <label for="to">To:</label>
-      <input type="text" class="datepicker" name="to" id="from"/>
+      <input type="text" class="datepicker" name="to" id="to"/>
     </p>
-    <p>You have to fill out both or none.</p>
+    <p class="hint">You have to fill out both or none.</p>
   </fieldset>
 
   <p><input type="submit" value="Load Report"/></p>

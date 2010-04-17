@@ -1,14 +1,11 @@
 body * {
   font-family: sans-serif;
+  font-family: Georgia;
 }
 
-table td {
-  border: 1px solid black;
-  padding: 3px;
-}
-
-table {
-  border-collapse: collapse;
+body > * {
+  margin-left: 20px;
+  margin-right: 20px;
 }
 
 #footer {
@@ -19,7 +16,7 @@ table {
 
 .hint {
   color: gray;
-  font-size: 70%;
+  font-size: 80%;
 }
 
 a.button {
@@ -29,4 +26,99 @@ a.button {
   color: black;
   text-decoration: none;
   padding: 1px;
+}
+
+#new_account {
+  margin-top: 20px;
+  background-color: #C8E5F4;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  -webkit-border-top-left-radius: 20px;
+  -webkit-border-top-right-radius: 20px;
+  -moz-border-top-left-radius: 20px;
+  -moz-border-top-right-radius: 20px;
+}
+
+#accounts {
+  background-color: #91CBEA;
+}
+
+#projects {
+  background-color: #5AB1DF;
+}
+
+#projects fieldset {
+  border: 1px solid white;
+  width: 300px;
+}
+
+#projects .hint {
+  color: #EEE;
+}
+
+#time_entries {
+  background-color: #2385D2;
+  color: white;
+  margin-bottom: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  -webkit-border-bottom-right-radius: 20px;
+  -webkit-border-bottom-left-radius: 20px;
+  -moz-border-bottom-right-radius: 20px;
+  -moz-border-bottom-left-radius: 20px;
+}
+
+#time_entries table td {
+  border: 0px;
+  border-bottom: 1px solid #CCC;
+  padding: 3px;
+  font-size: 80%;
+}
+
+#time_entries table th {
+  background-color: #DDD;
+  font-size: 80%;
+}
+
+#time_entries table {
+  border-collapse: collapse;
+  background-color: white;
+  color: #666;
+  width: 100%;
+}
+
+
+.stage {
+  padding: 20px;
+  min-height: 50px;
+}
+
+.stage ul {
+  padding-left: 0px;
+}
+
+.stage ul li {
+  list-style: none;
+  display: inline-block;
+  width: 300px;
+}
+
+label {
+  display: inline-block;
+  min-width: 130px;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+h1 + p {
+  margin-top: 0px;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: normal;
+  
 }
