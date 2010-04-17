@@ -1,7 +1,6 @@
 exports.MiteHelpers = {
   time_entries_view: function(time_entries) {
-    return time_entries.map(function(_entry) {
-      var entry = _entry['time_entry'];
+    return time_entries.map(function(entry) {
       var note = entry['note'] + '';
       return {
         service_name: entry['service_name'] || '-',

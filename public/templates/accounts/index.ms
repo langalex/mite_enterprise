@@ -8,8 +8,12 @@
     <p>
       <label for="account_api_key">mite API key:</label>
       <input type="text" name="account[api_key]" id="account_api_key"/>
+      <span class="hint">You find your API key at http://&lt;subdomain&gt;.mite.yo.lk/myself</span>
     </p>
-    <p><input type="submit" value="Add Account"/></p>
+    <p>
+      <input type="submit" value="Add Account"/><br/>
+      <span class="hint">We don't store that data, it's all in your browser.</span>
+    </p>
   </fieldset>
 </form>
 
@@ -19,7 +23,7 @@
     <ul>
       {{#accounts}}
         <li>
-          <input type="radio" name="account" value="{{subdomain}}|{{api_key}}" id="account_{{subdomain}}"/>
+          <input type="checkbox" name="accounts[]" value="{{subdomain}}|{{api_key}}" id="account_{{subdomain}}"/>
           <label for="account_{{subdomain}}">{{subdomain}}</label>
         </li>
       {{/accounts}}

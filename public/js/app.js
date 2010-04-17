@@ -23,26 +23,23 @@ var app = $.sammy('#app', function() {
   });
   
   this.get('#/projects', function(context) {
-    var subdomain = context.params['account'].split('|')[0];
-    var api_key = context.params['account'].split('|')[1];
-    $.get('/projects', {api_key: api_key, subdomain: subdomain},
+    $.get('/projects', {accounts: context.params['accounts']},
       function(projects) {
-        context.projects = projects.map(function(item) {return(item['project'])});
-        context.api_key = api_key;
-        context.subdomain = subdomain;
+        context.projects = projects.map(function(project) {
+          return {id: project['id'], api_key: project['api_key'],
+            subdomain: project['subdomain'], name: project['name']};
+        });
         context.partial('templates/projects/index.ms', function(html) {
           $('#projects').html(html);
         });
       }
-    )
+    );
   });
   
   this.get('#/time_entries', function(context) {
-    var that = this;
-    $.get('/time_entries', {api_key: context.params['api_key'],
-      subdomain: context.params['subdomain'], project_ids: context.params['project_ids'],
+    $.get('/time_entries', {projects: context.params['projects'],
         from: context.params['from'], to: context.params['to']}, function(time_entries) {
-        context.time_entries = that.time_entries_view(time_entries);
+        context.time_entries = context.time_entries_view(time_entries);
         context.partial('templates/time_entries/index.ms', function(html) {
           $('#time_entries').html(html);
         });

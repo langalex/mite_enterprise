@@ -5,25 +5,26 @@ var sys = require('sys'),
 (function test_projects() {
   
   var response = stub_response();
-  var client = stub_client('projects', ['[{"name":', ' "project1"}]']);
+  var client = stub_client('projects', ['[{"project":{"name":', '"project1"}}]'], ['[{"project":{"name":', '"project2"}},{"project":{"name":', '"project3"}}]']);
   
-  mite_server(client)({url: '/projects?api_key=12345&subdomain=upstream'}, response);
+  mite_server(client)({url: '/projects?accounts[]=upstream|12345&accounts[]=kriesse|65762'}, response);
 
-  assert.equal(response.data, '[{"name": "project1"}]');
+  assert.deepEqual(response.data,
+    '[{"name":"project1","subdomain":"upstream","api_key":"12345"},{"name":"project2","subdomain":"kriesse","api_key":"65762"},{"name":"project3","subdomain":"kriesse","api_key":"65762"}]');
   assert.equal(response.headers["Content-Type"], 'application/json');
-  assert.equal(response.headers["Content-Length"], 22);
+  assert.equal(response.headers["Content-Length"], 182);
   assert.equal(response.status, 200);
   assert.ok(response.closed);
   
-  assert.equal(client.subdomain, 'upstream');
-  assert.equal(client.api_key, '12345');
+  assert.deepEqual(client.subdomains, ['upstream', 'kriesse']);
+  assert.deepEqual(client.api_keys, ['12345', '65762']);
 })();
 
 (function test_time_entries_for_one_project() {
   var response = stub_response();
-  var client = stub_client('time_entries', ['[{"time": "2010-01-01"}]']);
+  var client = stub_client('time_entries', ['[{"time_entry":{"time": "2010-01-01"}}]']);
   
-  mite_server(client)({url: '/time_entries?api_key=12345&subdomain=upstream&from=2010-01-01&to=2010-03-01&project_ids%5B%5D=3'}, response);
+  mite_server(client)({url: '/time_entries?from=2010-01-01&to=2010-03-01&projects%5B%5D=upstream|12345|3'}, response);
 
   assert.equal(response.headers["Content-Type"], 'application/json');
   assert.equal(response.headers["Content-Length"], 23);
@@ -31,20 +32,21 @@ var sys = require('sys'),
   assert.equal(response.status, 200);
   assert.ok(response.closed);
   
-  assert.equal(client.subdomain, 'upstream');
-  assert.equal(client.api_key, '12345');
+  assert.deepEqual(client.subdomains, ['upstream']);
+  assert.deepEqual(client.api_keys, ['12345']);
   assert.deepEqual(client.parameters, [{from: '2010-01-01', to: '2010-03-01', project_id: '3'}]);
 })();
 
 (function test_time_entries_for_many_projects() {
   var response = stub_response();
-  var client = stub_client('time_entries', ['[{"time":"2010-01-01"}]'], ['[{"time":"2010-02-01"}]']);
+  var client = stub_client('time_entries', ['[{"time_entry":{"time":"2010-01-01"}}]'], ['[{"time_entry":{"time":"2010-02-01"}},{"time_entry":{"time":"2010-04-01"}}]']);
   
-  mite_server(client)({url: '/time_entries?api_key=12345&subdomain=upstream&project_ids%5B%5D=3&project_ids%5B%5D=4'}, response);
+  mite_server(client)({url: '/time_entries?projects%5B%5D=upstream|abxy|3&projects%5B%5D=kriesse|bnmh|4'}, response);
 
-  assert.equal(response.data, '[{"time":"2010-01-01"},{"time":"2010-02-01"}]');
-  assert.deepEqual(client.parameters.map(function(item) {return item.project_id}), ['3', '4']);
-  
+  assert.equal(response.data, '[{"time":"2010-01-01"},{"time":"2010-02-01"},{"time":"2010-04-01"}]');
+  assert.deepEqual(client.parameters.map(function(item) {return item.project_id;}), ['3', '4']);
+  assert.deepEqual(client.api_keys, ['abxy', 'bnmh']);
+  assert.deepEqual(client.subdomains, ['upstream', 'kriesse']);
 })();
 
 function stub_response() {
@@ -59,17 +61,16 @@ function stub_response() {
     close: function() {
       this.closed = true;
     }
-  })
+  });
 };
 
 function stub_client(function_name) {
   var data = extract_data(arguments);
-  var client = {};
+  var client = {subdomains: [], api_keys: [], parameters: []};
   var i = 0;
   client[function_name] = function(subdomain, api_key, parameters_callback) {
-    this.subdomain = subdomain;
-    this.api_key = api_key;
-    this.parameters = (this.parameters || []);
+    this.subdomains.push(subdomain);
+    this.api_keys.push(api_key);
     this.parameters.push(arguments.length == 4 ? parameters_callback : {});
     var callback = arguments.length == 4 ? arguments[3] : arguments[2];
     for(var j in data[i]) {
