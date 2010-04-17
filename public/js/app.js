@@ -19,7 +19,7 @@ var app = $.sammy('#app', function() {
     accounts.push(account);
     $.jStorage.set('accounts', accounts);
     
-    context.redirect('#/accounts');
+    context.redirect('#/');
   });
   
   this.get('#/projects', function(context) {
