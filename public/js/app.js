@@ -3,16 +3,33 @@ var app = $.sammy('#app', function() {
   this.use(Sammy.NestedParams);
   this.helpers(exports.MiteHelpers);
   
-  this.get('#/', function() {
-    this.partial('templates/projects/new.ms')
+  this.get('#/', function(context) {
+    context.redirect('#/accounts');
+  });
+  
+  this.get('#/accounts', function(context) {
+    context.accounts = $.jStorage.get('accounts', []);
+    context.any_accounts = context.accounts.length > 0;
+    context.partial('templates/accounts/index.ms');
+  });
+  
+  this.post('#/accounts', function(context) {
+    var accounts = $.jStorage.get('accounts', []);
+    var account = context.params['account'];
+    accounts.push(account);
+    $.jStorage.set('accounts', accounts);
+    
+    context.redirect('#/accounts');
   });
   
   this.get('#/projects', function(context) {
-    $.get('/projects', {api_key: context.params['api_key'], subdomain: context.params['subdomain']},
+    var subdomain = context.params['account'].split('|')[0];
+    var api_key = context.params['account'].split('|')[1];
+    $.get('/projects', {api_key: api_key, subdomain: subdomain},
       function(projects) {
         context.projects = projects.map(function(item) {return(item['project'])});
-        context.api_key = context.params['api_key'];
-        context.subdomain = context.params['subdomain'];
+        context.api_key = api_key;
+        context.subdomain = subdomain;
         context.partial('templates/projects/index.ms', function(html) {
           $('#projects').html(html);
         });

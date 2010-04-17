@@ -7,7 +7,8 @@
   <ul>
     {{#projects}}
       <li>
-        <input type="checkbox" name="project_ids[]" value="{{id}}"/> {{name}}
+        <input type="checkbox" name="project_ids[]" value="{{id}}" id="project_{{id}}"/>
+        <label for="project_{{id}}">{{name}}</label>
       </li>
     {{/projects}}
   </ul>
