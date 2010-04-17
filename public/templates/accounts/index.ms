@@ -25,6 +25,7 @@
         <li>
           <input type="checkbox" name="accounts[]" value="{{subdomain}}|{{api_key}}" id="account_{{subdomain}}"/>
           <label for="account_{{subdomain}}">{{subdomain}}</label>
+          <a href="#/accounts/delete/{{subdomain}}" class="button" onclick="return confirm('Really remove the account?');">remove</a>
         </li>
       {{/accounts}}
     </ul>

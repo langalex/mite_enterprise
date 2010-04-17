@@ -22,6 +22,23 @@ var app = $.sammy('#app', function() {
     context.redirect('#/');
   });
   
+  this.get('#/accounts/delete/:subdomain', function(context) {
+    var accounts = $.jStorage.get('accounts', []);
+    accounts = remove_account(accounts, context.params['subdomain']);
+    $.jStorage.set('accounts', accounts);
+    context.redirect('#/accounts');
+    
+    function remove_account(accounts, subdomain) {
+      var new_accounts = [];
+      for(var i in accounts) {
+        if(accounts[i]['subdomain'] != subdomain) {
+          new_accounts.push(accounts[i]);
+        };
+      };
+      return new_accounts;
+    };
+  });
+  
   this.get('#/projects', function(context) {
     $.get('/projects', {accounts: context.params['accounts']},
       function(projects) {

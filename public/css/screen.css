@@ -21,3 +21,12 @@ table {
   color: gray;
   font-size: 70%;
 }
+
+a.button {
+  font-size: 60%;
+  border: 1px solid gray;
+  background: #DDD;
+  color: black;
+  text-decoration: none;
+  padding: 1px;
+}

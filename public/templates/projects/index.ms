@@ -5,7 +5,7 @@
     {{#projects}}
       <li>
         <input type="checkbox" name="projects[]" value="{{subdomain}}|{{api_key}}|{{id}}" id="project_{{id}}"/>
-        <label for="project_{{id}}">{{name}}</label>
+        <label for="project_{{id}}">{{name}} ({{subdomain}})</label>
       </li>
     {{/projects}}
   </ul>
