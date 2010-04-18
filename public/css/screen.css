@@ -32,6 +32,14 @@ body {
   color: #FF2815;
 }
 
+a {
+  color: gray;
+}
+
+a:hover {
+  color: black;
+}
+
 a.button {
   font-size: 11px;
   background: #44A0E4;
@@ -42,7 +50,11 @@ a.button {
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
-  
+}
+
+a.button:hover {
+  color: black;
+  background-color: lightgray;
 }
 
 #new_account {
