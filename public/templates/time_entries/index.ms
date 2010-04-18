@@ -17,8 +17,8 @@
     <tr>
       <td>{{date_at}}</td>
       <td title="{{note}}">{{note_truncated}}</td>
-      <td>{{duration}}</td>
-      <td>{{revenue}}</td>
+      <td class="number">{{duration}}</td>
+      <td class="number">{{revenue}}</td>
       <td>{{user_name}}</td>
       <td>{{project_name}}</td>
       <td>{{service_name}}</td>

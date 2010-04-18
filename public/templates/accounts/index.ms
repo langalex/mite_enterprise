@@ -12,7 +12,7 @@
     </p>
     <p>
       <input type="submit" value="Add Account"/><br/>
-      <span class="hint">We don't store that data, it's all in your browser.</span>
+      <span class="hint">We don't store that data on our server, only in your browser.</span>
     </p>
   </form>
 </div>

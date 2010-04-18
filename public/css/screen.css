@@ -3,10 +3,19 @@ body * {
   font-family: Georgia;
 }
 
-body > * {
-  margin-left: 20px;
-  margin-right: 20px;
+body {
+  background-color: #EEEEEE;
+  padding: 0px;
+  margin: 0px;
 }
+
+#wrapper {
+  background-color: white;
+  margin: auto;
+  width: 930px;
+  padding: 20px;
+}
+
 
 #footer {
   margin-top: 100px;
@@ -19,13 +28,21 @@ body > * {
   font-size: 80%;
 }
 
+.highlight {
+  color: #FF2815;
+}
+
 a.button {
-  font-size: 60%;
-  border: 1px solid gray;
-  background: #DDD;
-  color: black;
+  font-size: 11px;
+  background: #44A0E4;
+  color: white;
+  font-family: sans-serif;
   text-decoration: none;
-  padding: 1px;
+  padding: 2px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  
 }
 
 #new_account {
@@ -68,6 +85,10 @@ a.button {
   -moz-border-bottom-left-radius: 20px;
 }
 
+#time_entries table td.number {
+  text-align: right;
+}
+
 #time_entries table td {
   border: 0px;
   border-bottom: 1px solid #CCC;
@@ -86,7 +107,6 @@ a.button {
   color: #666;
   width: 100%;
 }
-
 
 .stage {
   padding: 20px;
