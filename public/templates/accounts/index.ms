@@ -4,6 +4,7 @@
     <p>
       <label for="account_subdomain">mite subdomain:</label>
       <input type="text" name="account[subdomain]" id="account_subdomain"/>
+      <span class="hint">The subdomain part of http://&lt;subdomain&gt;.mite.yo.lk/</span>
     </p>
     <p>
       <label for="account_api_key">mite API key:</label>
