@@ -40,17 +40,21 @@ var app = $.sammy('#app', function() {
   });
   
   this.get('#/projects', function(context) {
-    $.get('/projects', {accounts: context.params['accounts']},
-      function(projects) {
-        context.projects = projects.map(function(project) {
-          return {id: project['id'], api_key: project['api_key'],
-            subdomain: project['subdomain'], name: project['name']};
-        });
-        context.partial('templates/projects/index.ms', function(html) {
-          $('#projects').html(html);
-        });
-      }
-    );
+    if(context.params['accounts']) {
+      $.get('/projects', {accounts: context.params['accounts']},
+        function(projects) {
+          context.projects = projects.map(function(project) {
+            return {id: project['id'], api_key: project['api_key'],
+              subdomain: project['subdomain'], name: project['name']};
+          });
+          context.partial('templates/projects/index.ms', function(html) {
+            $('#projects').html(html);
+          });
+        }
+      );
+    } else {
+      context.flash('You did not choose any accounts.');
+    };
   });
   
   this.get('#/time_entries', function(context) {
