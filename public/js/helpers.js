@@ -7,9 +7,9 @@ exports.MiteHelpers = {
         date_at: entry['date_at'],
         note: entry['note'],
         note_truncated: note.substr(0, 30) + (note.length > 30 ? '...' : ''),
-        duration: Math.floor(entry['minutes'] / 60) + ':' + entry['minutes'] % 60,
+        duration: Math.floor(entry['minutes'] / 60) + ':' + (entry['minutes'] % 60).toString().replace(/^(\d)$/, function(match) {return "0" + match;}),
         user_name: entry['user_name'],
-        revenue: (entry['revenue'] || 0) / 100.0,
+        revenue: ((entry['revenue'] || 0) / 100.0).toFixed(2),
         project_name: entry['project_name']
       };
     });
