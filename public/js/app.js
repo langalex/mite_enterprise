@@ -56,14 +56,17 @@ var app = $.sammy('#app', function() {
   this.get('#/time_entries', function(context) {
     var params = {projects: context.params['projects'],
         from: context.params['from'], to: context.params['to']};
-    $.get('/time_entries', params, function(time_entries) {
-        context.query = jQuery.param(params);
-        context.time_entries = context.time_entries_view(time_entries);
-        context.partial('templates/time_entries/index.ms', function(html) {
-          $('#time_entries').html(html);
-        });
-      }
-    );
+    if(context.params['projects']) {
+      $.get('/time_entries', params, function(time_entries) {
+          context.query = jQuery.param(params);
+          context.time_entries = context.time_entries_view(time_entries);
+          context.partial('templates/time_entries/index.ms', function(html) {
+            $('#time_entries').html(html);
+          });
+      });
+    } else {
+      context.flash('You did not choose any projects.');
+    }
   });
   
   
