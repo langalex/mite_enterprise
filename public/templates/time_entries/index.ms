@@ -1,4 +1,5 @@
 <h2>Time Entries</h2>
+<p>Download as <a href="/time_entries.csv?{{query}}">CSV</a></p>
 
 <table>
   <thead>

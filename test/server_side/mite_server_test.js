@@ -49,6 +49,20 @@ var sys = require('sys'),
   assert.deepEqual(client.subdomains, ['upstream', 'kriesse']);
 })();
 
+(function test_time_entries_csv() {
+  var response = stub_response();
+  var client = stub_client('time_entries', ['[{"time_entry":{"project_name":"project 1","service_name":"programming 90","minutes":192,"user_name":"Thilo","date_at":"2010-03-09","note":"done work","revenue":28800}}]']);
+  
+  mite_server(client)({url: '/time_entries.csv?projects%5B%5D=upstream|abxy|3'}, response);
+
+  assert.equal(response.data, 'Project;Service;Minutes;User;Date;Note;Revenue\nproject 1;programming 90;192;Thilo;2010-03-09;done work;28800');
+  assert.equal(response.headers["Content-Type"], 'text/csv');
+  assert.equal(response.headers["Content-Length"], 108);
+  assert.equal(response.status, 200);
+  assert.ok(response.closed);
+})();
+
+
 function stub_response() {
   return({
     sendHeader: function(status, headers) {

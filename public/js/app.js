@@ -54,8 +54,10 @@ var app = $.sammy('#app', function() {
   });
   
   this.get('#/time_entries', function(context) {
-    $.get('/time_entries', {projects: context.params['projects'],
-        from: context.params['from'], to: context.params['to']}, function(time_entries) {
+    var params = {projects: context.params['projects'],
+        from: context.params['from'], to: context.params['to']};
+    $.get('/time_entries', params, function(time_entries) {
+        context.query = jQuery.param(params);
         context.time_entries = context.time_entries_view(time_entries);
         context.partial('templates/time_entries/index.ms', function(html) {
           $('#time_entries').html(html);
