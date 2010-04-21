@@ -2,30 +2,31 @@ var app = $.sammy('#app', function() {
   this.use(Sammy.Mustache, 'ms');
   this.use(Sammy.NestedParams);
   this.helpers(exports.MiteHelpers);
+  this.store = new Sammy.Store({name: 'data', type: ['local', 'cookie']});
   
   this.get('#/', function(context) {
     context.redirect('#/accounts');
   });
   
   this.get('#/accounts', function(context) {
-    context.accounts = $.jStorage.get('accounts', []);
+    context.accounts = app.store.get('accounts') || [];
     context.any_accounts = context.accounts.length > 0;
     context.partial('templates/accounts/index.ms');
   });
   
   this.post('#/accounts', function(context) {
-    var accounts = $.jStorage.get('accounts', []);
+    var accounts = app.store.get('accounts') || [];
     var account = context.params['account'];
     accounts.push(account);
-    $.jStorage.set('accounts', accounts);
+    app.store.set('accounts', accounts);
     
     context.redirect('#/');
   });
   
   this.get('#/accounts/delete/:subdomain', function(context) {
-    var accounts = $.jStorage.get('accounts', []);
+    var accounts = app.store.get('accounts') || [];
     accounts = remove_account(accounts, context.params['subdomain']);
-    $.jStorage.set('accounts', accounts);
+    app.store.set('accounts', accounts);
     context.redirect('#/accounts');
     
     function remove_account(accounts, subdomain) {
