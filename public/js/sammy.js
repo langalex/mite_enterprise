@@ -132,15 +132,7 @@
       });
       return display;
     },
-    
-    // Generates a unique identifing string. Used for application namespaceing.
-    uuid: function() {
-      if (typeof this._uuid == 'undefined' || !this._uuid) {
-        this._uuid = (new Date()).getTime() + '-' + parseInt(Math.random() * 1000, 10);
-      }
-      return this._uuid;
-    },
-    
+        
     // Returns an array of keys for this object. If `attributes_only` 
     // is true will not return keys that map to a `function()`
     keys: function(attributes_only) {
@@ -243,7 +235,6 @@
         if (!every) { every = 10; }
         var hashCheck = function() {
           current_location = proxy.getLocation();
-          // Sammy.log('getLocation', current_location);
           if (!Sammy.HashLocationProxy._last_location || 
             current_location != Sammy.HashLocationProxy._last_location) {
             setTimeout(function() {
@@ -310,7 +301,8 @@
     this.listeners         = new Sammy.Object({});
     this.arounds           = [];
     this.befores           = [];
-    this.namespace         = this.uuid();
+    // generate a unique namespace
+    this.namespace         = (new Date()).getTime() + '-' + parseInt(Math.random() * 1000, 10);
     this.context_prototype = function() { Sammy.EventContext.apply(this, arguments); };
     this.context_prototype.prototype = new Sammy.EventContext();
 
@@ -378,7 +370,7 @@
     $element: function() {
       return $(this.element_selector);
     },
-    
+        
     // `use()` is the entry point for including Sammy plugins.
     // The first argument to use should be a function() that is evaluated 
     // in the context of the current application, just like the `app_function`
@@ -567,7 +559,7 @@
           context = data.context;
           delete data.context;
         } else {
-          context = new app.context_prototype(app, 'bind', e.type, data);
+          context = new app.context_prototype(app, 'bind', e.type, data, e.target);
         }
         e.cleaned_type = e.type.replace(app.eventNamespace(), '');
         callback.apply(context, [e, data]);
@@ -904,7 +896,7 @@
     //
     // Either returns the value returned by the route callback or raises a 404 Not Found error.
     //
-    runRoute: function(verb, path, params) {
+    runRoute: function(verb, path, params, target) {
       var app = this, 
           route = this.lookupRoute(verb, path),
           context, 
@@ -943,7 +935,7 @@
         }
         
         // set event context
-        context  = new this.context_prototype(this, verb, path, params);
+        context  = new this.context_prototype(this, verb, path, params, target);
         // ensure arrays
         arounds = this.arounds.slice(0);  
         befores = this.befores.slice(0);
@@ -1116,11 +1108,11 @@
       location = this.getLocation();
       // compare to see if hash has changed
       if (location != this.last_location) {
+        // reset last location
+        this.last_location = location;
         // lookup route for current hash
         returned = this.runRoute('get', location);
       }
-      // reset last location
-      this.last_location = location;
       return returned;
     },
     
@@ -1132,8 +1124,13 @@
       verb  = $.trim($form.attr('method').toString().toLowerCase());
       if (!verb || verb == '') { verb = 'get'; }
       this.log('_checkFormSubmission', $form, path, verb);
-      params = $.extend({}, this._parseFormParams($form), {'$form': $form});
-      returned = this.runRoute(verb, path, params);
+      params = $.extend({}, this._parseFormParams($form));
+      if(verb === 'get') {
+        window.location.hash = path + '?' + $form.serialize();
+        returned = false;
+      } else {
+        returned = this.runRoute(verb, path, params, form.get(0));
+      };
       return (typeof returned == 'undefined') ? false : returned;
     },
     
@@ -1205,12 +1202,16 @@
   // * `path` The string path invoked to run this context/route.
   // * `params` An Object of optional params to pass to the context. Is converted
   //   to a `Sammy.Object`.
+  // * `target` a DOM element that the event that holds this context originates
+  //   from. For post, put and del routes, this is the form element that triggered
+  //   the route.
   //
-  Sammy.EventContext = function(app, verb, path, params) {
+  Sammy.EventContext = function(app, verb, path, params, target) {
     this.app    = app;
     this.verb   = verb;
     this.path   = path;
     this.params = new Sammy.Object(params);
+    this.target = target;
   };
    
   Sammy.EventContext.prototype = $.extend({}, Sammy.Object.prototype, {
