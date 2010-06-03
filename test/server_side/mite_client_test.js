@@ -15,7 +15,7 @@ var assert = require('assert'),
   assert.equal(http_arguments.port, 80);
   assert.equal(http_arguments.host, 'upstream.mite.yo.lk');
   assert.equal(http_arguments.path, '/projects.json?api_key=7654');
-  assert.deepEqual(http_arguments.headers, {"Host": 'upstream.mite.yo.lk'});
+  assert.equal(http_arguments.headers['Host'], 'upstream.mite.yo.lk');
   assert.ok(http_arguments.closed);
   
 })();
@@ -34,7 +34,7 @@ var assert = require('assert'),
   assert.equal(http_arguments.port, 80);
   assert.equal(http_arguments.host, 'upstream.mite.yo.lk');
   assert.equal(http_arguments.path, '/time_entries.json?from=2010-01-01&to=2010-03-01&project_id=33&api_key=7654');
-  assert.deepEqual(http_arguments.headers, {"Host": 'upstream.mite.yo.lk'});
+  assert.equal(http_arguments.headers['Host'], 'upstream.mite.yo.lk');
   assert.ok(http_arguments.closed);
 })();
 
